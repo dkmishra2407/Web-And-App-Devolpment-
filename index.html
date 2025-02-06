@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1a73e8;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1a73e8;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        button:hover {
+            background-color: #1557b0;
+        }
+
+        .success-message {
+            display: none;
+            color: #28a745;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .welcome-container {
+            display: none;
+            text-align: center;
+        }
+
+        .toggle-form {
+            color: #1a73e8;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .toggle-form:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container" id="registerForm">
+            <h2>Register</h2>
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="reg-username">Username</label>
+                    <input type="text" id="reg-username" name="username" required minlength="4">
+                    <div class="error" id="username-error">Username must be at least 4 characters</div>
+                </div>
+        
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" name="email" required>
+                    <div class="error" id="email-error">Please enter a valid email</div>
+                </div>
+        
+                <div class="form-group">
+                    <label for="reg-address">Address</label>
+                    <input type="text" id="reg-address" name="address" required>
+                    <div class="error" id="address-error">Please enter a valid address</div>
+                </div>
+        
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="radio" name="city" value="Pune" required> New York
+                    <input type="radio" name="city" value="Latur"> Los Angeles
+                    <div class="error" id="city-error">Please select a city</div>
+                </div>
+        
+                <div class="form-group">
+                    <label>Hobbies</label>
+                    <input type="checkbox" name="hobbies" value="reading"> Reading
+                    <input type="checkbox" name="hobbies" value="sports"> Sports
+                    <div class="error" id="hobbies-error">Please select at least one hobby</div>
+                </div>
+        
+                <div class="form-group">
+                    <label>Gender</label>
+                    <input type="radio" name="gender" value="male" required> Male
+                    <input type="radio" name="gender" value="female"> Female
+                    <div class="error" id="gender-error">Please select your gender</div>
+                </div>
+        
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" name="password" required minlength="6">
+                    <div class="error" id="password-error">Password must be at least 6 characters</div>
+                </div>
+        
+                <button type="submit">Register</button>
+                <div class="toggle-form" onclick="toggleForms()">Already have an account? Login</div>
+            </form>
+            <div class="success-message" id="reg-success">Registration successful!</div>
+        </div>
+        
+
+        <div class="form-container" id="loginForm" style="display: none;">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                    <div class="error" id="login-error">Invalid email or password</div>
+                </div>
+
+                <button type="submit">Login</button>
+                <div class="toggle-form" onclick="toggleForms()">Need an account? Register</div>
+            </form>
+        </div>
+
+        <!-- Welcome Screen -->
+        <div class="form-container welcome-container" id="welcomeContainer">
+            <h2>Welcome!</h2>
+            <p id="welcomeMessage"></p>
+            <p id="welcomeMessage1"></p>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // Toggle between login and registration forms
+        function toggleForms() {
+            const registerForm = document.getElementById('registerForm');
+            const loginForm = document.getElementById('loginForm');
+            
+            if (registerForm.style.display === 'none') {
+                registerForm.style.display = 'block';
+                loginForm.style.display = 'none';
+            } else {
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+            }
+        }
+
+        // Handle Registration
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            
+            // Validation
+            if (username.length < 3) {
+                document.getElementById('username-error').style.display = 'block';
+                return;
+            }
+            
+            if (!email.match(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/)) {
+                document.getElementById('email-error').style.display = 'block';
+                return;
+            }
+            
+            if (password.length < 4) {
+                alert('Password must be at least 8 characters');
+                document.getElementById('password-error').style.display = 'block';
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            if (users.some(user => user.email === email)) {
+                alert('Email already registered');
+                return;
+            }
+            
+            users.push({
+                username,
+                email,
+                password 
+            });
+            
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            document.getElementById('reg-success').style.display = 'block';
+            document.getElementById('registrationForm').reset();
+            
+            setTimeout(() => {
+                toggleForms();
+                document.getElementById('reg-success').style.display = 'none';
+            }, 2000);
+        });
+
+        // Handle Login
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showWelcomeScreen(user);
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        });
+
+        function showWelcomeScreen(user) {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            const welcomeContainer = document.getElementById('welcomeContainer');
+            welcomeContainer.style.display = 'block';
+            document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.username}!`;
+            document.getElementById('welcomeMessage1').textContent = `Email, ${user.email}!`;
+            // document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.username}!`;
+        }
+
+        // Handle logout
+        function logout() {
+            localStorage.removeItem('currentUser');
+            document.getElementById('welcomeContainer').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('login-form').reset();
+            document.getElementById('login-error').style.display = 'none';
+        }
+
+        // Check if user is already logged in on page load
+        window.addEventListener('load', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                showWelcomeScreen(currentUser);
+            }
+        });
+    </script>
+</body>
+</html>
